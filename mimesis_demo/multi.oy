@@ -1,0 +1,29 @@
+import json
+
+from mimesis import Field, Fieldset, Schema
+from mimesis.enums import Gender, TimestampFormat
+from mimesis.locales import Locale
+from pygments import highlight
+from pygments.lexers import JsonLexer
+from pygments.formatters import TerminalFormatter
+
+field = Field(Locale.JA, seed=0xff)
+fieldset = Fieldset(Locale.JA, seed=0xff)
+
+schema_definition = lambda: {
+    "pk": field("increment"),
+    "uid": field("uuid"),
+    "name": field("text.word"),
+    "version": field("version"),
+    "timestamp": field("timestamp", fmt=TimestampFormat.POSIX),
+    "owner": {
+        "email": field("person.email", domains=["mimesis.name"]),
+        "creator": field("full_name", gender=Gender.FEMALE),
+    },
+    "apiKeys": fieldset("token_hex", key=lambda s: s[:16], i=3),
+}
+
+schema = Schema(schema=schema_definition, iterations=100)
+data = schema.create()
+formatted_data = json.dumps(data, indent=2, ensure_ascii=False)
+print(highlight(formatted_data, JsonLexer(), TerminalFormatter()))
