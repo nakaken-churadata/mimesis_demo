@@ -1,2 +1,2 @@
-# mimesys-demo
+# mimesis-demo
 
