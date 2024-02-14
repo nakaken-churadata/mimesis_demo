@@ -12,15 +12,13 @@ fieldset = Fieldset(Locale.JA, seed=0xff)
 
 schema_definition = lambda: {
     "pk": field("increment"),
-    "uid": field("uuid"),
-    "name": field("text.word"),
-    "version": field("version"),
-    "timestamp": field("timestamp", fmt=TimestampFormat.POSIX),
-    "owner": {
-        "email": field("person.email", domains=["mimesis.name"]),
-        "creator": field("full_name", gender=Gender.FEMALE),
-    },
-    "apiKeys": fieldset("token_hex", key=lambda s: s[:16], i=3),
+    "name": field("full_name"),
+    "email": field("person.email"),
+    "phone": field("person.phone_number"),
+    "nickname": field("text.word"),
+    "favorite": field("food.dish"),
+    "desc": field("text.sentence"),
+    "timestamp": field("timestamp"),
 }
 
 schema = Schema(schema=schema_definition, iterations=100)
